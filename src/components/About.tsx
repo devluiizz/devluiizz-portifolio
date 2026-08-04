@@ -60,12 +60,6 @@ export function About() {
               </dt>
               <dd className="mt-1 text-sm text-text">Código simples, testável</dd>
             </div>
-            <div>
-              <dt className="font-mono text-xs uppercase tracking-widest text-text-muted">
-                Disponibilidade
-              </dt>
-              <dd className="mt-1 text-sm text-text">Aberto a oportunidades</dd>
-            </div>
           </dl>
         </Reveal>
       </div>
