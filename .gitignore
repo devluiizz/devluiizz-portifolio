@@ -26,10 +26,6 @@ out/
 **/fixtures/local/
 *.local.json
 
-# Fictitious project case studies used for local development/preview only.
-# Remove this line once real, approved project content replaces the fixtures.
-/content/projects/*.mdx
-
 # Editor / OS
 .vscode/*
 !.vscode/extensions.json

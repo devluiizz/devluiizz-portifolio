@@ -29,4 +29,11 @@ test.describe("Projects section", () => {
       await expect(externalLinks.nth(i)).toHaveAttribute("rel", /noreferrer/);
     }
   });
+
+  test("shows the portfolio project and no placeholder projects", async ({ page }) => {
+    await page.goto("/#projects");
+    const section = page.getByRole("region", { name: "O que eu construí" });
+    await expect(section.getByRole("heading", { name: "Portfólio pessoal" })).toBeVisible();
+    await expect(section.getByText("Pulse Metrics")).toHaveCount(0);
+  });
 });
