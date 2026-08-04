@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, type TouchEvent } from "react";
+import { createPortal } from "react-dom";
 import type { ProjectMedia } from "@/lib/content/schema";
 import { usePrefersReducedMotion } from "@/hooks/useMediaQuery";
 
@@ -27,6 +28,13 @@ export function ProjectMediaLightbox({
 
   useEffect(() => {
     closeButtonRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, []);
 
   useEffect(() => {
@@ -91,7 +99,7 @@ export function ProjectMediaLightbox({
     }
   }
 
-  return (
+  return createPortal(
     <div
       data-testid="lightbox-backdrop"
       className={`fixed inset-0 z-[200] flex items-center justify-center bg-bg/90 p-4 ${
@@ -164,6 +172,7 @@ export function ProjectMediaLightbox({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

@@ -65,4 +65,10 @@ describe("ProjectMediaLightbox", () => {
     renderLightbox(0);
     expect(screen.getByRole("button", { name: "Fechar" })).toHaveFocus();
   });
+
+  it("renders via a portal directly into document.body", () => {
+    renderLightbox(0);
+    const backdrop = screen.getByTestId("lightbox-backdrop");
+    expect(backdrop.parentElement).toBe(document.body);
+  });
 });

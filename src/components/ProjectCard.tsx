@@ -107,7 +107,7 @@ export function ProjectCard({ project, featured }: { project: Project; featured:
         )}
       </div>
 
-      {lightboxOpen && (
+      {hasMedia && lightboxOpen && (
         <ProjectMediaLightbox
           media={project.media}
           index={mediaIndex}
