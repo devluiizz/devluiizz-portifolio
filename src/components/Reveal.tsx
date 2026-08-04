@@ -28,13 +28,14 @@ export function Reveal({ children, className, delay = 0, y = 24 }: RevealProps) 
     const ctx = gsap.context(() => {
       gsap.fromTo(
         el,
-        { opacity: 0, y },
+        { opacity: 0, y, scale: 0.97 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.7,
+          scale: 1,
+          duration: 0.8,
           delay,
-          ease: "power2.out",
+          ease: "power3.out",
           scrollTrigger: {
             trigger: el,
             start: "top 85%",
