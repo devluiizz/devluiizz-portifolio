@@ -1,16 +1,19 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useHasFinePointer, usePrefersReducedMotion } from "@/hooks/useMediaQuery";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 const INTERACTIVE_SELECTOR =
   'a, button, [role="button"], input, textarea, select, [data-cursor-hover]';
 
+// A single combined query avoids two independently-timed state corrections
+// (fine pointer + reduced motion) racing each other through separate renders.
+const CURSOR_QUERY =
+  "(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
+
 export function CustomCursor() {
-  const hasFinePointer = useHasFinePointer();
-  const prefersReducedMotion = usePrefersReducedMotion();
+  const active = useMediaQuery(CURSOR_QUERY);
   const dotRef = useRef<HTMLDivElement>(null);
-  const active = hasFinePointer && !prefersReducedMotion;
 
   useEffect(() => {
     if (!active) {
