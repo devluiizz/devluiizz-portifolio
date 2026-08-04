@@ -1,4 +1,8 @@
+"use client";
+
+import { useRef, useState } from "react";
 import type { Project } from "@/lib/content/schema";
+import { ProjectMediaLightbox } from "./ProjectMediaLightbox";
 
 const STATUS_LABEL: Record<Project["status"], string> = {
   live: "No ar",
@@ -27,6 +31,16 @@ function ExternalLink({ href, label }: { href: string; label: string }) {
 }
 
 export function ProjectCard({ project, featured }: { project: Project; featured: boolean }) {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [mediaIndex, setMediaIndex] = useState(0);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const hasMedia = project.media.length > 0;
+
+  function closeLightbox() {
+    setLightboxOpen(false);
+    triggerRef.current?.focus();
+  }
+
   return (
     <article
       className={`rounded-2xl border border-border bg-card p-6 transition-colors hover:border-accent/60 ${
@@ -77,10 +91,31 @@ export function ProjectCard({ project, featured }: { project: Project; featured:
         </ul>
       )}
 
-      <div className="mt-5 flex gap-5">
+      <div className="mt-5 flex flex-wrap items-center gap-5">
         {project.demoUrl && <ExternalLink href={project.demoUrl} label="Demo" />}
         {project.repoUrl && <ExternalLink href={project.repoUrl} label="Repositório" />}
+        {hasMedia && (
+          <button
+            ref={triggerRef}
+            type="button"
+            onClick={() => setLightboxOpen(true)}
+            data-cursor-hover
+            className="text-sm font-medium text-accent underline decoration-accent/40 underline-offset-4 transition-colors hover:decoration-accent"
+          >
+            Ver mídia do projeto ({project.media.length})
+          </button>
+        )}
       </div>
+
+      {lightboxOpen && (
+        <ProjectMediaLightbox
+          media={project.media}
+          index={mediaIndex}
+          onIndexChange={setMediaIndex}
+          onClose={closeLightbox}
+          projectTitle={project.title}
+        />
+      )}
     </article>
   );
 }
