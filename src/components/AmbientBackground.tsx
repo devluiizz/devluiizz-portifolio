@@ -20,7 +20,7 @@ export function AmbientBackground() {
 
     const ctx = gsap.context(() => {
       gsap.to(el, {
-        yPercent: 12,
+        y: "10vh",
         ease: "none",
         scrollTrigger: {
           trigger: document.body,

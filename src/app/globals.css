@@ -139,7 +139,10 @@ body {
 
 .ambient-bg {
   position: fixed;
-  inset: 0;
+  top: -15vh;
+  right: 0;
+  bottom: -15vh;
+  left: 0;
   overflow: hidden;
   pointer-events: none;
 }
