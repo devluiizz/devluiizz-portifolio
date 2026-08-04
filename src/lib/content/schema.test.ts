@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { projectFrontmatterSchema } from "./schema";
+import { experienceSchema, projectFrontmatterSchema } from "./schema";
 
 const validFrontmatter = {
   title: "Example",
@@ -34,6 +34,58 @@ describe("projectFrontmatterSchema", () => {
   it("rejects a malformed demo URL", () => {
     expect(() =>
       projectFrontmatterSchema.parse({ ...validFrontmatter, demoUrl: "not-a-url" }),
+    ).toThrow();
+  });
+});
+
+describe("experienceSchema", () => {
+  const validExperience = {
+    company: "Acme",
+    role: "Engineer",
+    startDate: "2026-01",
+    endDate: null,
+    description: "Did the thing.",
+    stack: ["TypeScript"],
+  };
+
+  it("accepts a valid experience and defaults highlights to an empty array", () => {
+    const result = experienceSchema.parse(validExperience);
+    expect(result.highlights).toEqual([]);
+  });
+
+  it("accepts a null endDate for an ongoing role", () => {
+    expect(() => experienceSchema.parse(validExperience)).not.toThrow();
+  });
+
+  it("rejects an empty tech stack", () => {
+    expect(() => experienceSchema.parse({ ...validExperience, stack: [] })).toThrow();
+  });
+
+  it("rejects a missing company", () => {
+    expect(() => experienceSchema.parse({ ...validExperience, company: "" })).toThrow();
+  });
+});
+
+describe("projectFrontmatterSchema media field", () => {
+  it("defaults media to an empty array", () => {
+    const result = projectFrontmatterSchema.parse(validFrontmatter);
+    expect(result.media).toEqual([]);
+  });
+
+  it("accepts a valid media item", () => {
+    const result = projectFrontmatterSchema.parse({
+      ...validFrontmatter,
+      media: [{ type: "image", src: "/shot.png", alt: "Tela do app" }],
+    });
+    expect(result.media).toHaveLength(1);
+  });
+
+  it("rejects an invalid media type", () => {
+    expect(() =>
+      projectFrontmatterSchema.parse({
+        ...validFrontmatter,
+        media: [{ type: "audio", src: "/shot.mp3", alt: "Som" }],
+      }),
     ).toThrow();
   });
 });
