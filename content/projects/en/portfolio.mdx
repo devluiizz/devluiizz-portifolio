@@ -1,0 +1,24 @@
+---
+title: "Personal portfolio"
+slug: "portfolio"
+summary: "The very site you’re looking at — built from scratch with Next.js, Tailwind, and GSAP, with the same care for architecture and testing as my other projects."
+problem: "I needed a place to present my projects and career with an experience as carefully crafted as the code behind it — not a static list of links."
+role: "Solo project — end-to-end design, architecture, and development."
+stack: ["Next.js", "React", "TypeScript", "Tailwind CSS", "GSAP", "Zod", "MDX", "Vitest", "Playwright"]
+status: "in-progress"
+featured: true
+order: 0
+highlights:
+  - "Light and dark themes with a persisted preference and no flash of the wrong theme on load."
+  - "Scroll-driven entrance and parallax animations with GSAP, turned off automatically when the user prefers reduced motion (prefers-reduced-motion)."
+  - "Custom cursor that only activates on devices with a fine pointer, and stays off on touch screens and when the user prefers reduced motion."
+  - "Optional interface sounds, off by default, with the preference persisted."
+  - "Typed content layer built on MDX with Zod validation, covered by unit (Vitest) and end-to-end (Playwright) tests."
+learnings:
+  - "Treating prefers-reduced-motion as a first-class requirement — not an extra — changed how every animation on the site was designed from the start."
+---
+
+This portfolio is both a showcase and a project: every part of it — theme, cursor,
+sound, scroll — was built and tested like any other system presented here, with
+the same attention to architecture, accessibility, and code organization. This
+description is updated as development progresses.

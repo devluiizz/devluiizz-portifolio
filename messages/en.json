@@ -1,0 +1,105 @@
+{
+  "metadata": {
+    "title": "{name} — {role}"
+  },
+  "profile": {
+    "role": "Web development",
+    "studentNote": "Software Engineering student",
+    "positioning": "I build web applications that pair solid engineering with thoughtful interface design — made not just to work, but to have a clear architecture, clean organization, and an experience people enjoy using."
+  },
+  "common": {
+    "skipToContent": "Skip to content",
+    "stackLabel": "Technologies used"
+  },
+  "header": {
+    "primaryNav": "Main navigation",
+    "mobileNav": "Main navigation (mobile)",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "navigation": {
+    "home": "Home",
+    "experience": "Experience",
+    "projects": "Projects",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "language": {
+    "label": "Language"
+  },
+  "theme": {
+    "enableDark": "Switch to dark theme",
+    "enableLight": "Switch to light theme"
+  },
+  "sound": {
+    "enable": "Turn on interface sounds",
+    "disable": "Turn off interface sounds"
+  },
+  "hero": {
+    "label": "Introduction",
+    "cta": {
+      "projects": "View projects",
+      "contact": "Get in touch"
+    }
+  },
+  "experience": {
+    "eyebrow": "Experience",
+    "title": "Where I’ve worked",
+    "present": "present"
+  },
+  "projects": {
+    "eyebrow": "Projects",
+    "title": "What I’ve built",
+    "empty": "No projects published yet.",
+    "problem": "Problem:",
+    "demo": "Demo",
+    "repository": "Repository",
+    "viewMedia": "View project media ({count})",
+    "status": {
+      "live": "Live",
+      "inProgress": "In progress",
+      "archived": "Archived"
+    }
+  },
+  "media": {
+    "dialogLabel": "Media for {title}",
+    "close": "Close",
+    "previous": "Previous",
+    "previousLabel": "Previous media",
+    "next": "Next",
+    "nextLabel": "Next media",
+    "position": "{current} / {total}"
+  },
+  "about": {
+    "eyebrow": "About",
+    "title": "How I work",
+    "body": {
+      "intro": "I work where backend engineering meets interface design — I like systems that have to hold up under real load, and interfaces that make those systems easy to understand.",
+      "study": "I’m a Software Engineering student, and I use projects outside the classroom to put into practice ideas that university only covers in theory — architecture, data consistency, performance, accessibility.",
+      "approach": "I prefer simple solutions that solve the right problem over abstractions built for problems that may never show up."
+    },
+    "facts": {
+      "focus": {
+        "label": "Focus",
+        "value": "Backend & frontend"
+      },
+      "education": {
+        "label": "Education",
+        "value": "Software Engineering"
+      },
+      "approach": {
+        "label": "Approach",
+        "value": "Simple, testable code"
+      }
+    }
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Let’s talk",
+    "description": "Email is the most direct way to reach me. You can also find me on GitHub and LinkedIn.",
+    "email": "Email"
+  },
+  "footer": {
+    "tagline": "Built from scratch, with attention to detail."
+  }
+}

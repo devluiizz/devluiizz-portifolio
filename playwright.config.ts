@@ -7,6 +7,8 @@ export default defineConfig({
   reporter: "list",
   use: {
     baseURL: "http://localhost:3000",
+    // Locale detection follows Accept-Language; pin it so specs run against pt-BR by default.
+    locale: "pt-BR",
     trace: "on-first-retry",
   },
   webServer: {

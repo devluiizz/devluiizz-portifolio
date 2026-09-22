@@ -1,8 +1,10 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useSound } from "@/lib/sound";
 
 export function SoundToggle() {
+  const t = useTranslations("sound");
   const { enabled, toggleEnabled, play } = useSound();
 
   return (
@@ -14,7 +16,7 @@ export function SoundToggle() {
         if (next) window.setTimeout(() => play("tick"), 60);
       }}
       aria-pressed={enabled}
-      aria-label={enabled ? "Desativar sons da interface" : "Ativar sons da interface"}
+      aria-label={enabled ? t("disable") : t("enable")}
       className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-text-muted transition-colors hover:border-accent hover:text-accent"
     >
       {enabled ? (

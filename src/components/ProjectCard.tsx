@@ -1,14 +1,15 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import type { Project } from "@/lib/content/schema";
 import { ProjectMediaLightbox } from "./ProjectMediaLightbox";
 
-const STATUS_LABEL: Record<Project["status"], string> = {
-  live: "No ar",
-  "in-progress": "Em andamento",
-  archived: "Arquivado",
-};
+const STATUS_MESSAGE_KEY = {
+  live: "live",
+  "in-progress": "inProgress",
+  archived: "archived",
+} as const satisfies Record<Project["status"], string>;
 
 const STATUS_CLASS: Record<Project["status"], string> = {
   live: "bg-success/15 text-success",
@@ -31,6 +32,8 @@ function ExternalLink({ href, label }: { href: string; label: string }) {
 }
 
 export function ProjectCard({ project, featured }: { project: Project; featured: boolean }) {
+  const t = useTranslations("projects");
+  const tCommon = useTranslations("common");
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [mediaIndex, setMediaIndex] = useState(0);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -54,7 +57,7 @@ export function ProjectCard({ project, featured }: { project: Project; featured:
         <span
           className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-medium ${STATUS_CLASS[project.status]}`}
         >
-          {STATUS_LABEL[project.status]}
+          {t(`status.${STATUS_MESSAGE_KEY[project.status]}`)}
         </span>
       </div>
 
@@ -62,12 +65,12 @@ export function ProjectCard({ project, featured }: { project: Project; featured:
 
       {featured && (
         <p className="mt-3 text-sm leading-relaxed text-text-muted">
-          <span className="font-medium text-text">Problema: </span>
+          <span className="font-medium text-text">{t("problem")} </span>
           {project.problem}
         </p>
       )}
 
-      <ul className="mt-4 flex flex-wrap gap-2" aria-label="Tecnologias utilizadas">
+      <ul className="mt-4 flex flex-wrap gap-2" aria-label={tCommon("stackLabel")}>
         {project.stack.map((tech) => (
           <li
             key={tech}
@@ -92,8 +95,8 @@ export function ProjectCard({ project, featured }: { project: Project; featured:
       )}
 
       <div className="mt-5 flex flex-wrap items-center gap-5">
-        {project.demoUrl && <ExternalLink href={project.demoUrl} label="Demo" />}
-        {project.repoUrl && <ExternalLink href={project.repoUrl} label="Repositório" />}
+        {project.demoUrl && <ExternalLink href={project.demoUrl} label={t("demo")} />}
+        {project.repoUrl && <ExternalLink href={project.repoUrl} label={t("repository")} />}
         {hasMedia && (
           <button
             ref={triggerRef}
@@ -102,7 +105,7 @@ export function ProjectCard({ project, featured }: { project: Project; featured:
             data-cursor-hover
             className="text-sm font-medium text-accent underline decoration-accent/40 underline-offset-4 transition-colors hover:decoration-accent"
           >
-            Ver mídia do projeto ({project.media.length})
+            {t("viewMedia", { count: project.media.length })}
           </button>
         )}
       </div>

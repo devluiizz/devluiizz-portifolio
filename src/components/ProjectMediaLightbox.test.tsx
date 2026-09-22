@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ProjectMediaLightbox } from "./ProjectMediaLightbox";
 import type { ProjectMedia } from "@/lib/content/schema";
+import { renderWithIntl } from "@/test/renderWithIntl";
 
 const media: ProjectMedia[] = [
   { type: "image", src: "/one.png", alt: "Tela um" },
@@ -12,7 +13,7 @@ const media: ProjectMedia[] = [
 function renderLightbox(index = 0) {
   const onIndexChange = vi.fn();
   const onClose = vi.fn();
-  render(
+  renderWithIntl(
     <ProjectMediaLightbox
       media={media}
       index={index}

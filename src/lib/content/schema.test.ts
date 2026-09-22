@@ -41,16 +41,16 @@ describe("projectFrontmatterSchema", () => {
 describe("experienceSchema", () => {
   const validExperience = {
     company: "Acme",
-    role: "Engineer",
+    role: { "pt-BR": "Engenheiro", en: "Engineer" },
     startDate: "2026-01",
     endDate: null,
-    description: "Did the thing.",
+    description: { "pt-BR": "Fez a coisa.", en: "Did the thing." },
     stack: ["TypeScript"],
   };
 
-  it("accepts a valid experience and defaults highlights to an empty array", () => {
+  it("accepts a valid experience and defaults highlights to empty per locale", () => {
     const result = experienceSchema.parse(validExperience);
-    expect(result.highlights).toEqual([]);
+    expect(result.highlights).toEqual({ "pt-BR": [], en: [] });
   });
 
   it("accepts a null endDate for an ongoing role", () => {
@@ -63,6 +63,12 @@ describe("experienceSchema", () => {
 
   it("rejects a missing company", () => {
     expect(() => experienceSchema.parse({ ...validExperience, company: "" })).toThrow();
+  });
+
+  it("rejects a role without an English translation", () => {
+    expect(() =>
+      experienceSchema.parse({ ...validExperience, role: { "pt-BR": "Engenheiro" } }),
+    ).toThrow();
   });
 });
 

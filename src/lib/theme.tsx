@@ -4,7 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useState,
   type ReactNode,
 } from "react";
@@ -35,10 +35,28 @@ export const themeInitScript = `
 })();
 `;
 
-function readStoredTheme(): Theme {
-  if (typeof document === "undefined") return "light";
+// Only part of the server HTML: it must run before first paint on a full page
+// load. On client re-renders (e.g. switching locale remounts the layout) React
+// would not execute it anyway, and ThemeProvider re-applies the theme instead.
+export function ThemeInitScript() {
+  if (typeof window !== "undefined") return null;
+  return <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />;
+}
+
+function isTheme(value: string | null): value is Theme {
+  return value === "light" || value === "dark";
+}
+
+function resolveTheme(): Theme {
   const attr = document.documentElement.getAttribute("data-theme");
-  return attr === "dark" ? "dark" : "light";
+  if (isTheme(attr)) return attr;
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (isTheme(stored)) return stored;
+  } catch {
+    // storage unavailable; fall through to the system preference
+  }
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -47,9 +65,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   // hydration, this just syncs React state to it right after mount.
   const [theme, setThemeState] = useState<Theme>("light");
 
-  useEffect(() => {
+  // Switching locale remounts the [locale] layout, and React resets the
+  // attributes of <html> it doesn't own. Re-applying before paint avoids a flash.
+  useLayoutEffect(() => {
+    const resolved = resolveTheme();
+    document.documentElement.setAttribute("data-theme", resolved);
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setThemeState(readStoredTheme());
+    setThemeState(resolved);
   }, []);
 
   const setTheme = useCallback((next: Theme) => {

@@ -1,28 +1,30 @@
+import { useTranslations } from "next-intl";
 import { siteConfig } from "@/content/site";
 import { Reveal } from "./Reveal";
 
-const CONTACT_LINKS = [
-  {
-    label: "E-mail",
-    value: siteConfig.email,
-    href: `mailto:${siteConfig.email}`,
-    external: false,
-  },
-  {
-    label: "GitHub",
-    value: siteConfig.github.replace("https://", ""),
-    href: siteConfig.github,
-    external: true,
-  },
-  {
-    label: "LinkedIn",
-    value: siteConfig.linkedin.replace("https://", ""),
-    href: siteConfig.linkedin,
-    external: true,
-  },
-];
-
 export function Contact() {
+  const t = useTranslations("contact");
+  const links = [
+    {
+      label: t("email"),
+      value: siteConfig.email,
+      href: `mailto:${siteConfig.email}`,
+      external: false,
+    },
+    {
+      label: "GitHub",
+      value: siteConfig.github.replace("https://", ""),
+      href: siteConfig.github,
+      external: true,
+    },
+    {
+      label: "LinkedIn",
+      value: siteConfig.linkedin.replace("https://", ""),
+      href: siteConfig.linkedin,
+      external: true,
+    },
+  ];
+
   return (
     <section
       id="contact"
@@ -31,24 +33,23 @@ export function Contact() {
     >
       <Reveal>
         <span className="font-mono text-xs uppercase tracking-widest text-text-muted">
-          Contato
+          {t("eyebrow")}
         </span>
         <h2
           id="contact-heading"
           className="font-display mt-3 max-w-xl text-balance text-3xl font-medium tracking-tight text-text sm:text-4xl"
         >
-          Vamos conversar
+          {t("title")}
         </h2>
         <p className="mt-4 max-w-xl text-pretty text-base leading-relaxed text-text-muted">
-          A forma mais direta de falar comigo é por e-mail. Também estou no
-          GitHub e no LinkedIn.
+          {t("description")}
         </p>
       </Reveal>
 
       <Reveal delay={0.05}>
         <ul className="mt-8 grid gap-4 sm:grid-cols-3">
-          {CONTACT_LINKS.map((link) => (
-            <li key={link.label}>
+          {links.map((link) => (
+            <li key={link.href}>
               <a
                 href={link.href}
                 {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}

@@ -1,12 +1,16 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import { navItems, siteConfig } from "@/content/site";
 import { NavLink } from "./NavLink";
 import { ThemeToggle } from "./ThemeToggle";
 import { SoundToggle } from "./SoundToggle";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export function Header() {
+  const t = useTranslations("header");
+  const tNav = useTranslations("navigation");
   const [activeHref, setActiveHref] = useState(navItems[0]?.href ?? "");
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -49,20 +53,21 @@ export function Header() {
         </a>
 
         <nav
-          aria-label="Navegação principal"
+          aria-label={t("primaryNav")}
           className="hidden items-center gap-8 md:flex"
         >
           {navItems.map((item) => (
             <NavLink
               key={item.href}
               href={item.href}
-              label={item.label}
+              label={tNav(item.key)}
               active={activeHref === item.href}
             />
           ))}
         </nav>
 
         <div className="flex items-center gap-2">
+          <LanguageSwitcher />
           <div className="hidden items-center gap-2 md:flex">
             <SoundToggle />
             <ThemeToggle />
@@ -72,7 +77,7 @@ export function Header() {
             onClick={() => setMenuOpen((open) => !open)}
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
-            aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+            aria-label={menuOpen ? t("closeMenu") : t("openMenu")}
             className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-text md:hidden"
           >
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" aria-hidden="true">
@@ -99,7 +104,7 @@ export function Header() {
       {menuOpen && (
         <nav
           id="mobile-nav"
-          aria-label="Navegação principal (mobile)"
+          aria-label={t("mobileNav")}
           className="flex flex-col gap-1 border-t border-border bg-bg px-6 py-4 md:hidden"
         >
           {navItems.map((item) => (
@@ -109,7 +114,7 @@ export function Header() {
               onClick={() => setMenuOpen(false)}
               className="rounded-md px-2 py-3 text-base font-medium text-text-muted transition-colors hover:bg-card hover:text-text"
             >
-              {item.label}
+              {tNav(item.key)}
             </a>
           ))}
           <div className="mt-2 flex items-center gap-2 border-t border-border pt-4">

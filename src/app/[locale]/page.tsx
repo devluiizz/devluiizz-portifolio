@@ -1,3 +1,6 @@
+import { use } from "react";
+import { setRequestLocale } from "next-intl/server";
+import type { Locale } from "@/i18n/routing";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Experience } from "@/components/Experience";
@@ -6,7 +9,10 @@ import { Projects } from "@/components/Projects";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
 
-export default function Home() {
+export default function Home({ params }: { params: Promise<{ locale: Locale }> }) {
+  const { locale } = use(params);
+  setRequestLocale(locale);
+
   return (
     <>
       <Header />

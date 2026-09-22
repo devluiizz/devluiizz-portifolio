@@ -1,10 +1,13 @@
+import { useLocale, useTranslations } from "next-intl";
 import { getFeaturedProjects, getSecondaryProjects } from "@/lib/content/projects";
 import { ProjectCard } from "./ProjectCard";
 import { Reveal } from "./Reveal";
 
 export function Projects() {
-  const featured = getFeaturedProjects();
-  const secondary = getSecondaryProjects();
+  const t = useTranslations("projects");
+  const locale = useLocale();
+  const featured = getFeaturedProjects(locale);
+  const secondary = getSecondaryProjects(locale);
   const isEmpty = featured.length === 0 && secondary.length === 0;
 
   return (
@@ -15,20 +18,20 @@ export function Projects() {
     >
       <Reveal>
         <span className="font-mono text-xs uppercase tracking-widest text-text-muted">
-          Projetos
+          {t("eyebrow")}
         </span>
         <h2
           id="projects-heading"
           className="font-display mt-3 max-w-xl text-balance text-3xl font-medium tracking-tight text-text sm:text-4xl"
         >
-          O que eu construí
+          {t("title")}
         </h2>
       </Reveal>
 
       {isEmpty ? (
         <Reveal delay={0.05}>
           <p className="mt-10 rounded-2xl border border-dashed border-border p-8 text-center text-sm text-text-muted">
-            Nenhum projeto publicado ainda.
+            {t("empty")}
           </p>
         </Reveal>
       ) : (

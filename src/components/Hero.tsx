@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useTranslations } from "next-intl";
 import { siteConfig } from "@/content/site";
 import { usePrefersReducedMotion } from "@/hooks/useMediaQuery";
 
@@ -11,6 +12,7 @@ if (typeof window !== "undefined") {
 }
 
 export function Hero() {
+  const t = useTranslations();
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -42,7 +44,7 @@ export function Hero() {
     <section
       ref={sectionRef}
       id="home"
-      aria-label="Introdução"
+      aria-label={t("hero.label")}
       className="mx-auto flex min-h-[calc(100svh-4rem)] max-w-6xl flex-col justify-center px-6 py-24"
     >
       <div ref={contentRef}>
@@ -50,7 +52,7 @@ export function Hero() {
           className="hero-enter font-mono text-sm tracking-wide text-accent"
           style={{ animationDelay: "0ms" }}
         >
-          {siteConfig.role} &middot; {siteConfig.studentNote}
+          {t("profile.role")} &middot; {t("profile.studentNote")}
         </p>
 
         <h1
@@ -64,7 +66,7 @@ export function Hero() {
           className="hero-enter mt-6 max-w-xl text-pretty text-lg leading-relaxed text-text-muted"
           style={{ animationDelay: "160ms" }}
         >
-          {siteConfig.positioning}
+          {t("profile.positioning")}
         </p>
 
         <div
@@ -76,13 +78,13 @@ export function Hero() {
             className="rounded-full px-6 py-3 text-sm font-medium text-white shadow-sm transition-transform hover:-translate-y-0.5"
             style={{ background: "var(--gradient-accent)" }}
           >
-            Ver projetos
+            {t("hero.cta.projects")}
           </a>
           <a
             href="#contact"
             className="rounded-full border border-border px-6 py-3 text-sm font-medium text-text transition-colors hover:border-accent hover:text-accent"
           >
-            Contato
+            {t("hero.cta.contact")}
           </a>
         </div>
       </div>

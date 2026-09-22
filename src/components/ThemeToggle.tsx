@@ -1,9 +1,11 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useTheme } from "@/lib/theme";
 import { useSound } from "@/lib/sound";
 
 export function ThemeToggle() {
+  const t = useTranslations("theme");
   const { theme, toggleTheme } = useTheme();
   const { play } = useSound();
   const isDark = theme === "dark";
@@ -16,7 +18,7 @@ export function ThemeToggle() {
         toggleTheme();
       }}
       aria-pressed={isDark}
-      aria-label={isDark ? "Ativar tema claro" : "Ativar tema escuro"}
+      aria-label={isDark ? t("enableLight") : t("enableDark")}
       className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-text-muted transition-colors hover:border-accent hover:text-accent"
     >
       {isDark ? (

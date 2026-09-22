@@ -1,14 +1,13 @@
+export type NavKey = "home" | "experience" | "projects" | "about" | "contact";
+
 export interface NavItem {
-  label: string;
+  key: NavKey;
   href: string;
 }
 
+// Translatable copy (role, positioning, labels) lives in messages/*.json.
 export const siteConfig = {
   name: "Luiz Felipe",
-  role: "Desenvolvimento web",
-  studentNote: "Estudante de Engenharia de Software",
-  positioning:
-    "Desenvolvo aplicações web unindo engenharia sólida e design de interface cuidadoso — não só para funcionar, mas para ter arquitetura clara, organização e uma experiência agradável de usar.",
   location: "",
   email: "luiizz.oliveira02@outlook.com",
   github: "https://github.com/devluiizz",
@@ -16,9 +15,9 @@ export const siteConfig = {
 } as const;
 
 export const navItems: NavItem[] = [
-  { label: "Início", href: "#home" },
-  { label: "Trajetória", href: "#experience" },
-  { label: "Projetos", href: "#projects" },
-  { label: "Sobre", href: "#about" },
-  { label: "Contato", href: "#contact" },
+  { key: "home", href: "#home" },
+  { key: "experience", href: "#experience" },
+  { key: "projects", href: "#projects" },
+  { key: "about", href: "#about" },
+  { key: "contact", href: "#contact" },
 ];

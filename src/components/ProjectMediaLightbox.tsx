@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, type TouchEvent } from "react";
 import { createPortal } from "react-dom";
+import { useTranslations } from "next-intl";
 import type { ProjectMedia } from "@/lib/content/schema";
 import { usePrefersReducedMotion } from "@/hooks/useMediaQuery";
 
@@ -20,6 +21,7 @@ export function ProjectMediaLightbox({
   onClose,
   projectTitle,
 }: ProjectMediaLightboxProps) {
+  const t = useTranslations("media");
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const touchStartX = useRef<number | null>(null);
@@ -111,7 +113,7 @@ export function ProjectMediaLightbox({
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
-        aria-label={`Mídia do projeto ${projectTitle}`}
+        aria-label={t("dialogLabel", { title: projectTitle })}
         className="relative w-full max-w-3xl rounded-2xl border border-border bg-card p-4"
         onClick={(event) => event.stopPropagation()}
       >
@@ -119,7 +121,7 @@ export function ProjectMediaLightbox({
           ref={closeButtonRef}
           type="button"
           onClick={onClose}
-          aria-label="Fechar"
+          aria-label={t("close")}
           className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-border text-text-muted transition-colors hover:border-accent hover:text-accent"
         >
           &times;
@@ -153,21 +155,21 @@ export function ProjectMediaLightbox({
             <button
               type="button"
               onClick={() => onIndexChange((index - 1 + media.length) % media.length)}
-              aria-label="Mídia anterior"
+              aria-label={t("previousLabel")}
               className="rounded-full border border-border px-4 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent"
             >
-              Anterior
+              {t("previous")}
             </button>
             <span className="font-mono text-xs text-text-muted">
-              {index + 1} / {media.length}
+              {t("position", { current: index + 1, total: media.length })}
             </span>
             <button
               type="button"
               onClick={() => onIndexChange((index + 1) % media.length)}
-              aria-label="Próxima mídia"
+              aria-label={t("nextLabel")}
               className="rounded-full border border-border px-4 py-2 text-sm text-text transition-colors hover:border-accent hover:text-accent"
             >
-              Próxima
+              {t("next")}
             </button>
           </div>
         )}

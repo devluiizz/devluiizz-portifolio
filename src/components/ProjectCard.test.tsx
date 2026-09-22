@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ProjectCard } from "./ProjectCard";
 import type { Project } from "@/lib/content/schema";
+import { renderWithIntl } from "@/test/renderWithIntl";
 
 const baseProject: Project = {
   title: "Projeto Teste",
@@ -22,7 +23,7 @@ const baseProject: Project = {
 
 describe("ProjectCard", () => {
   it("does not render a media trigger when the project has no media", () => {
-    render(<ProjectCard project={baseProject} featured={false} />);
+    renderWithIntl(<ProjectCard project={baseProject} featured={false} />);
     expect(screen.queryByRole("button", { name: /ver mídia/i })).not.toBeInTheDocument();
   });
 
@@ -34,7 +35,7 @@ describe("ProjectCard", () => {
         { type: "image", src: "/shot-2.png", alt: "Tela de projetos" },
       ],
     };
-    render(<ProjectCard project={project} featured={false} />);
+    renderWithIntl(<ProjectCard project={project} featured={false} />);
 
     await userEvent.click(screen.getByRole("button", { name: /ver mídia/i }));
 
@@ -47,12 +48,25 @@ describe("ProjectCard", () => {
       ...baseProject,
       media: [{ type: "image", src: "/shot-1.png", alt: "Tela inicial" }],
     };
-    render(<ProjectCard project={project} featured={false} />);
+    renderWithIntl(<ProjectCard project={project} featured={false} />);
 
     const trigger = screen.getByRole("button", { name: /ver mídia/i });
     await userEvent.click(trigger);
     await userEvent.click(screen.getByRole("button", { name: "Fechar" }));
 
     expect(trigger).toHaveFocus();
+  });
+
+  it("renders its interface copy in English", () => {
+    const project: Project = {
+      ...baseProject,
+      status: "in-progress",
+      media: [{ type: "image", src: "/shot-1.png", alt: "Home screen" }],
+    };
+    renderWithIntl(<ProjectCard project={project} featured={false} />, "en");
+
+    expect(screen.getByText("In progress")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "View project media (1)" })).toBeInTheDocument();
+    expect(screen.getByRole("list", { name: "Technologies used" })).toBeInTheDocument();
   });
 });

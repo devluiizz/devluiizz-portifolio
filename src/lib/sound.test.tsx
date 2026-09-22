@@ -1,8 +1,9 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SoundProvider } from "./sound";
 import { SoundToggle } from "@/components/SoundToggle";
+import { renderWithIntl } from "@/test/renderWithIntl";
 
 describe("SoundToggle", () => {
   beforeEach(() => {
@@ -10,7 +11,7 @@ describe("SoundToggle", () => {
   });
 
   it("defaults to disabled", () => {
-    render(
+    renderWithIntl(
       <SoundProvider>
         <SoundToggle />
       </SoundProvider>,
@@ -23,7 +24,7 @@ describe("SoundToggle", () => {
   });
 
   it("persists the enabled preference across toggles", async () => {
-    render(
+    renderWithIntl(
       <SoundProvider>
         <SoundToggle />
       </SoundProvider>,

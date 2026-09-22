@@ -3,7 +3,8 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { experiences } from "@/content/experiences";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { getExperiences } from "@/content/experiences";
 import { usePrefersReducedMotion } from "@/hooks/useMediaQuery";
 import { Reveal } from "./Reveal";
 
@@ -11,23 +12,30 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const MONTHS_PT = [
-  "jan", "fev", "mar", "abr", "mai", "jun",
-  "jul", "ago", "set", "out", "nov", "dez",
-];
-
-function formatMonthYear(value: string): string {
-  const [year, month] = value.split("-");
-  return `${MONTHS_PT[Number(month) - 1]}/${year}`;
-}
-
-function formatPeriod(startDate: string, endDate: string | null): string {
-  const start = formatMonthYear(startDate);
-  const end = endDate ? formatMonthYear(endDate) : "atual";
-  return `${start} — ${end}`;
+// Dates are calendar months ("YYYY-MM"), so they are pinned to UTC to never
+// shift into the previous month in negative-offset time zones.
+function toMonthDate(value: string): Date {
+  const [year, month] = value.split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1, 1));
 }
 
 export function Experience() {
+  const t = useTranslations("experience");
+  const tCommon = useTranslations("common");
+  const locale = useLocale();
+  const format = useFormatter();
+  const experiences = getExperiences(locale);
+
+  function formatPeriod(startDate: string, endDate: string | null): string {
+    const monthYear = (value: string) =>
+      format.dateTime(toMonthDate(value), {
+        month: "short",
+        year: "numeric",
+        timeZone: "UTC",
+      });
+    return `${monthYear(startDate)} — ${endDate ? monthYear(endDate) : t("present")}`;
+  }
+
   const trackRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -66,13 +74,13 @@ export function Experience() {
     >
       <Reveal>
         <span className="font-mono text-xs uppercase tracking-widest text-text-muted">
-          Trajetória
+          {t("eyebrow")}
         </span>
         <h2
           id="experience-heading"
           className="font-display mt-3 max-w-xl text-balance text-3xl font-medium tracking-tight text-text sm:text-4xl"
         >
-          Onde já atuei
+          {t("title")}
         </h2>
       </Reveal>
 
@@ -112,7 +120,7 @@ export function Experience() {
                     {experience.description}
                   </p>
 
-                  <ul className="mt-4 flex flex-wrap gap-2" aria-label="Tecnologias utilizadas">
+                  <ul className="mt-4 flex flex-wrap gap-2" aria-label={tCommon("stackLabel")}>
                     {experience.stack.map((tech) => (
                       <li
                         key={tech}

@@ -1,12 +1,13 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ThemeProvider } from "./theme";
 import { SoundProvider } from "./sound";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { renderWithIntl } from "@/test/renderWithIntl";
 
 function renderToggle() {
-  return render(
+  return renderWithIntl(
     <ThemeProvider>
       <SoundProvider>
         <ThemeToggle />

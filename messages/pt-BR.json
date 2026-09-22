@@ -1,0 +1,105 @@
+{
+  "metadata": {
+    "title": "{name} — {role}"
+  },
+  "profile": {
+    "role": "Desenvolvimento web",
+    "studentNote": "Estudante de Engenharia de Software",
+    "positioning": "Desenvolvo aplicações web unindo engenharia sólida e design de interface cuidadoso — não só para funcionar, mas para ter arquitetura clara, organização e uma experiência agradável de usar."
+  },
+  "common": {
+    "skipToContent": "Pular para o conteúdo",
+    "stackLabel": "Tecnologias utilizadas"
+  },
+  "header": {
+    "primaryNav": "Navegação principal",
+    "mobileNav": "Navegação principal (mobile)",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu"
+  },
+  "navigation": {
+    "home": "Início",
+    "experience": "Trajetória",
+    "projects": "Projetos",
+    "about": "Sobre",
+    "contact": "Contato"
+  },
+  "language": {
+    "label": "Idioma"
+  },
+  "theme": {
+    "enableDark": "Ativar tema escuro",
+    "enableLight": "Ativar tema claro"
+  },
+  "sound": {
+    "enable": "Ativar sons da interface",
+    "disable": "Desativar sons da interface"
+  },
+  "hero": {
+    "label": "Introdução",
+    "cta": {
+      "projects": "Ver projetos",
+      "contact": "Contato"
+    }
+  },
+  "experience": {
+    "eyebrow": "Trajetória",
+    "title": "Onde já atuei",
+    "present": "atual"
+  },
+  "projects": {
+    "eyebrow": "Projetos",
+    "title": "O que eu construí",
+    "empty": "Nenhum projeto publicado ainda.",
+    "problem": "Problema:",
+    "demo": "Demo",
+    "repository": "Repositório",
+    "viewMedia": "Ver mídia do projeto ({count})",
+    "status": {
+      "live": "No ar",
+      "inProgress": "Em andamento",
+      "archived": "Arquivado"
+    }
+  },
+  "media": {
+    "dialogLabel": "Mídia do projeto {title}",
+    "close": "Fechar",
+    "previous": "Anterior",
+    "previousLabel": "Mídia anterior",
+    "next": "Próxima",
+    "nextLabel": "Próxima mídia",
+    "position": "{current} / {total}"
+  },
+  "about": {
+    "eyebrow": "Sobre",
+    "title": "Como eu trabalho",
+    "body": {
+      "intro": "Trabalho na fronteira entre engenharia de backend e interfaces — gosto de sistemas que precisam se comportar bem sob carga real, e de interfaces que tornam esses sistemas fáceis de entender.",
+      "study": "Sou estudante de Engenharia de Software e uso os projetos fora da sala de aula para testar, na prática, ideias que a faculdade só cobre em teoria — arquitetura, consistência de dados, performance, acessibilidade.",
+      "approach": "Prefiro soluções simples que resolvem o problema certo a abstrações que antecipam problemas que talvez nunca apareçam."
+    },
+    "facts": {
+      "focus": {
+        "label": "Foco",
+        "value": "Backend & frontend"
+      },
+      "education": {
+        "label": "Formação",
+        "value": "Eng. de Software"
+      },
+      "approach": {
+        "label": "Abordagem",
+        "value": "Código simples, testável"
+      }
+    }
+  },
+  "contact": {
+    "eyebrow": "Contato",
+    "title": "Vamos conversar",
+    "description": "A forma mais direta de falar comigo é por e-mail. Também estou no GitHub e no LinkedIn.",
+    "email": "E-mail"
+  },
+  "footer": {
+    "tagline": "Construído do zero, com atenção aos detalhes."
+  }
+}
