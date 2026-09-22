@@ -8,6 +8,12 @@ export default defineConfig({
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
+    server: {
+      deps: {
+        // next-intl imports "next/navigation", which only resolves when bundled.
+        inline: ["next-intl"],
+      },
+    },
   },
   resolve: {
     alias: {

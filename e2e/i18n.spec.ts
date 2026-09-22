@@ -24,7 +24,12 @@ test.describe("Internationalization", () => {
     await languageButton(page, "Português (Brasil)").click();
     await expect(page).toHaveURL(/\/$/);
     await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
+
+    await page.goto("/");
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
   });
+
 
   test("persists the chosen language across reloads and new visits", async ({ page }) => {
     await page.goto("/");

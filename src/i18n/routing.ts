@@ -1,13 +1,16 @@
 import { defineRouting } from "next-intl/routing";
 
+export const LOCALE_COOKIE = {
+  name: "NEXT_LOCALE",
+  maxAge: 60 * 60 * 24 * 365,
+};
+
 export const routing = defineRouting({
   locales: ["pt-BR", "en"],
   defaultLocale: "pt-BR",
   // The default locale keeps the existing unprefixed URLs; English lives under /en.
   localePrefix: "as-needed",
-  localeCookie: {
-    maxAge: 60 * 60 * 24 * 365,
-  },
+  localeCookie: LOCALE_COOKIE,
 });
 
 export type Locale = (typeof routing.locales)[number];

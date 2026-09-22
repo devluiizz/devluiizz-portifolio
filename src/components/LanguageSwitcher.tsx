@@ -1,8 +1,10 @@
 "use client";
 
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { usePathname, useRouter } from "@/i18n/navigation";
+import { getPathname, usePathname } from "@/i18n/navigation";
+import { persistLocale } from "@/i18n/persistLocale";
 import { LOCALE_NAMES, LOCALE_SHORT_LABELS, routing, type Locale } from "@/i18n/routing";
 import { useSound } from "@/lib/sound";
 
@@ -18,8 +20,9 @@ export function LanguageSwitcher() {
   function selectLocale(next: Locale) {
     if (next === locale) return;
     play("tick");
+    persistLocale(next);
     startTransition(() => {
-      router.replace(pathname, { locale: next, scroll: false });
+      router.replace(getPathname({ href: pathname, locale: next }), { scroll: false });
     });
   }
 
