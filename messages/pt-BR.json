@@ -22,6 +22,7 @@
     "experience": "Trajetória",
     "projects": "Projetos",
     "about": "Sobre",
+    "terminal": "Terminal",
     "contact": "Contato"
   },
   "language": {
@@ -92,6 +93,23 @@
         "value": "Código simples, testável"
       }
     }
+  },
+  "terminal": {
+    "heading": "Terminal DEVLUIIZZ OS",
+    "status": {
+      "booting": "Iniciando",
+      "ready": "Sistema pronto"
+    },
+    "boot": {
+      "init": "inicializando devluiizz os v2.0",
+      "modules": "carregando módulos: next.js · typescript · gsap",
+      "session": "sessão iniciada em /home/luiz"
+    },
+    "copyright": "(c) {year} {name}. Todos os direitos reservados.",
+    "hint": "Digite <command>''ajuda''</command> para ver os comandos",
+    "placeholder": "Escreva o comando",
+    "inputLabel": "Comando do terminal",
+    "historyLabel": "Comandos digitados"
   },
   "contact": {
     "eyebrow": "Contato",

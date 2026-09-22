@@ -19,6 +19,18 @@
   --color-disabled-text: #a1a1aa;
   --gradient-accent: linear-gradient(135deg, #7c3aed, #a855f7);
   --ambient-opacity: 0.14;
+
+  /* The terminal window is dark in both themes, so these are theme-independent. */
+  --color-terminal-bg: #0c0a12;
+  --color-terminal-bar: #13101c;
+  --color-terminal-line: #262036;
+  --color-terminal-text: #ece9f5;
+  --color-terminal-muted: #8f88a6;
+  --color-terminal-accent: #a78bfa;
+  --color-terminal-accent-strong: #8b5cf6;
+  --terminal-glow: rgba(139, 92, 246, 0.35);
+  --terminal-shadow:
+    0 40px 100px -30px rgba(76, 29, 149, 0.55), 0 12px 32px -12px rgba(12, 10, 18, 0.5);
 }
 
 :root[data-theme="dark"] {
@@ -82,6 +94,13 @@
   --color-info: var(--color-info);
   --color-disabled: var(--color-disabled);
   --color-disabled-text: var(--color-disabled-text);
+  --color-terminal-bg: var(--color-terminal-bg);
+  --color-terminal-bar: var(--color-terminal-bar);
+  --color-terminal-line: var(--color-terminal-line);
+  --color-terminal-text: var(--color-terminal-text);
+  --color-terminal-muted: var(--color-terminal-muted);
+  --color-terminal-accent: var(--color-terminal-accent);
+  --color-terminal-accent-strong: var(--color-terminal-accent-strong);
   --font-display: var(--font-fraunces);
   --font-sans: var(--font-manrope);
   --font-mono: var(--font-jetbrains-mono);
@@ -200,6 +219,220 @@ body {
   }
 }
 
+.terminal-window {
+  animation: terminal-enter 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.terminal-glow {
+  background: var(--gradient-accent);
+  filter: blur(48px);
+  opacity: 0.22;
+}
+
+.terminal-frame {
+  box-shadow: var(--terminal-shadow);
+}
+
+.terminal-screen {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-terminal-line) transparent;
+}
+
+.terminal-vignette {
+  background:
+    radial-gradient(120% 70% at 100% 0%, rgba(139, 92, 246, 0.12), transparent 60%),
+    radial-gradient(90% 60% at 0% 100%, rgba(139, 92, 246, 0.06), transparent 65%);
+}
+
+.terminal-scanlines {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.022) 0,
+    rgba(255, 255, 255, 0.022) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+.terminal-sweep {
+  height: 140px;
+  background: linear-gradient(to bottom, transparent, rgba(167, 139, 250, 0.05), transparent);
+  animation: terminal-sweep 9s linear infinite;
+  will-change: transform;
+}
+
+.terminal-boot {
+  animation: terminal-line-in 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.terminal-pixel {
+  animation: terminal-pixel-in 0.35s ease-out both;
+}
+
+.terminal-logo {
+  filter: drop-shadow(0 0 14px var(--terminal-glow));
+}
+
+.terminal-glitch {
+  opacity: 0;
+  animation: terminal-glitch 8s steps(1, end) 2.4s infinite;
+}
+
+.terminal-glitch-b {
+  animation-delay: 2.45s;
+}
+
+.terminal-status-boot {
+  animation: terminal-fade-out 0.3s ease-out 1.6s both;
+}
+
+.terminal-status-ready {
+  animation: terminal-line-in 0.3s ease-out 1.6s both;
+}
+
+.terminal-status-dot {
+  animation:
+    terminal-dot-ready 0.3s ease-out 1.6s both,
+    terminal-pulse 2.4s ease-in-out 2s infinite;
+}
+
+/* Focus is shown by the highlighted prompt row, solid cursor and window border. */
+.terminal-input:focus-visible {
+  outline: none;
+}
+
+.terminal-cursor-blink {
+  animation: terminal-blink 1.1s ease-in-out infinite;
+}
+
+[data-terminal="idle"] :is(
+    .terminal-window,
+    .terminal-boot,
+    .terminal-pixel,
+    .terminal-glitch,
+    .terminal-sweep,
+    .terminal-status-boot,
+    .terminal-status-ready,
+    .terminal-status-dot
+  ) {
+  animation-play-state: paused;
+}
+
+[data-instant] .terminal-window,
+[data-instant] .terminal-boot,
+[data-instant] .terminal-pixel,
+[data-instant] .terminal-status-boot,
+[data-instant] .terminal-status-ready {
+  animation-delay: 0s;
+  animation-duration: 0.01ms;
+}
+
+[data-instant] .terminal-status-dot {
+  animation-delay: 0s, 0.4s;
+}
+
+@keyframes terminal-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes terminal-line-in {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes terminal-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes terminal-pixel-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes terminal-glitch {
+  0%,
+  94% {
+    opacity: 0;
+    transform: translateX(0);
+    clip-path: inset(0 0 100% 0);
+  }
+  95% {
+    opacity: 0.75;
+    transform: translateX(-2px);
+    clip-path: inset(18% 0 58% 0);
+  }
+  96% {
+    opacity: 0.75;
+    transform: translateX(2px);
+    clip-path: inset(62% 0 12% 0);
+  }
+  97%,
+  100% {
+    opacity: 0;
+    transform: translateX(0);
+    clip-path: inset(0 0 100% 0);
+  }
+}
+
+@keyframes terminal-sweep {
+  from {
+    transform: translateY(-140px);
+  }
+  to {
+    transform: translateY(100vh);
+  }
+}
+
+@keyframes terminal-dot-ready {
+  from {
+    background-color: var(--color-warning);
+  }
+  to {
+    background-color: var(--color-success);
+  }
+}
+
+@keyframes terminal-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(74, 222, 128, 0);
+  }
+}
+
+@keyframes terminal-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.15;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -208,5 +441,21 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terminal-window,
+  .terminal-boot,
+  .terminal-pixel,
+  .terminal-status-boot,
+  .terminal-status-ready,
+  .terminal-status-dot {
+    animation-delay: 0s !important;
+  }
+
+  .terminal-sweep,
+  .terminal-glitch {
+    display: none;
   }
 }

@@ -1,8 +1,9 @@
-export type NavKey = "home" | "experience" | "projects" | "about" | "contact";
+export type NavKey = "home" | "experience" | "projects" | "about" | "terminal" | "contact";
 
 export interface NavItem {
   key: NavKey;
-  href: string;
+  // Home sections are "/#id" so they also work from other pages; other entries are routes.
+  href: `/#${string}` | `/${string}`;
 }
 
 // Translatable copy (role, positioning, labels) lives in messages/*.json.
@@ -15,9 +16,10 @@ export const siteConfig = {
 } as const;
 
 export const navItems: NavItem[] = [
-  { key: "home", href: "#home" },
-  { key: "experience", href: "#experience" },
-  { key: "projects", href: "#projects" },
-  { key: "about", href: "#about" },
-  { key: "contact", href: "#contact" },
+  { key: "home", href: "/#home" },
+  { key: "experience", href: "/#experience" },
+  { key: "projects", href: "/#projects" },
+  { key: "about", href: "/#about" },
+  { key: "terminal", href: "/#terminal" },
+  { key: "contact", href: "/#contact" },
 ];

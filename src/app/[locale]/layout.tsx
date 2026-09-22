@@ -5,8 +5,8 @@ import { Fraunces, Manrope, JetBrains_Mono } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { siteConfig } from "@/content/site";
-import { getPathname } from "@/i18n/navigation";
-import { OPEN_GRAPH_LOCALES, routing, type Locale } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
+import { buildPageMetadata } from "@/lib/metadata";
 import { getSiteUrl } from "@/lib/site-url";
 import { ThemeInitScript, ThemeProvider } from "@/lib/theme";
 import { SoundProvider } from "@/lib/sound";
@@ -48,37 +48,15 @@ export async function generateMetadata({ params }: LocaleLayoutProps): Promise<M
   if (!hasLocale(routing.locales, locale)) return {};
 
   const t = await getTranslations({ locale });
-  const title = t("metadata.title", { name: siteConfig.name, role: t("profile.role") });
-  const description = t("profile.positioning");
-  const pathFor = (target: Locale) => getPathname({ href: "/", locale: target });
 
   return {
     metadataBase: getSiteUrl(),
-    title,
-    description,
-    alternates: {
-      canonical: pathFor(locale),
-      languages: {
-        ...Object.fromEntries(routing.locales.map((target) => [target, pathFor(target)])),
-        "x-default": pathFor(routing.defaultLocale),
-      },
-    },
-    openGraph: {
-      type: "website",
-      url: pathFor(locale),
-      siteName: siteConfig.name,
-      title,
-      description,
-      locale: OPEN_GRAPH_LOCALES[locale],
-      alternateLocale: routing.locales
-        .filter((target) => target !== locale)
-        .map((target) => OPEN_GRAPH_LOCALES[target]),
-    },
-    twitter: {
-      card: "summary",
-      title,
-      description,
-    },
+    ...buildPageMetadata({
+      locale,
+      href: "/",
+      title: t("metadata.title", { name: siteConfig.name, role: t("profile.role") }),
+      description: t("profile.positioning"),
+    }),
   };
 }
 

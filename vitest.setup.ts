@@ -18,3 +18,24 @@ Object.defineProperty(window, "matchMedia", {
   }),
 });
 
+
+// jsdom does not implement element scrolling.
+if (!Element.prototype.scrollTo) {
+  Element.prototype.scrollTo = () => {};
+}
+
+// jsdom has no IntersectionObserver; elements are never reported as visible.
+if (!("IntersectionObserver" in window)) {
+  class IntersectionObserverStub {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+    takeRecords() {
+      return [];
+    }
+  }
+  Object.defineProperty(window, "IntersectionObserver", {
+    writable: true,
+    value: IntersectionObserverStub,
+  });
+}

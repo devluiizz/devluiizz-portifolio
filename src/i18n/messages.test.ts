@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { createTranslator } from "next-intl";
 import ptBR from "../../messages/pt-BR.json";
 import en from "../../messages/en.json";
 import { loadMessages } from "./messages";
@@ -35,6 +36,40 @@ describe("translation messages", () => {
   it("uses the same interpolation arguments in every locale", () => {
     for (const [key, value] of Object.entries(flatPtBR)) {
       expect(placeholders(flatEn[key] ?? ""), key).toEqual(placeholders(value));
+    }
+  });
+});
+
+function tags(message: string): string[] {
+  return [...message.matchAll(/<(\w+)>/g)].map((match) => match[1]).sort();
+}
+
+describe.each([
+  ["pt-BR", ptBR, flatPtBR],
+  ["en", en, flatEn],
+] as const)("%s messages", (locale, messages, flat) => {
+  it("all parse and format without errors", () => {
+    const errors: string[] = [];
+    const t = createTranslator({
+      locale,
+      messages,
+      timeZone: "UTC",
+      onError: (error) => errors.push(error.message),
+    });
+
+    for (const [key, message] of Object.entries(flat)) {
+      const values: Record<string, string | ((chunks: string) => string)> = {};
+      for (const name of placeholders(message)) values[name] = "x";
+      for (const name of tags(message)) values[name] = (chunks) => chunks;
+      const output = t.markup(key as never, values as never);
+      expect(output, key).not.toContain("<");
+    }
+    expect(errors).toEqual([]);
+  });
+
+  it("keeps rich-text tags identical to pt-BR", () => {
+    for (const [key, message] of Object.entries(flatPtBR)) {
+      expect(tags(flat[key] ?? ""), key).toEqual(tags(message));
     }
   });
 });
