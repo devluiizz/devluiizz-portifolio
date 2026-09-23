@@ -20,6 +20,13 @@
   --gradient-accent: linear-gradient(135deg, #7c3aed, #a855f7);
   --ambient-opacity: 0.14;
 
+  /* QR codes stay dark-on-light in both themes so every scanner can read them. */
+  --color-qr-bg: #ffffff;
+  --color-qr-fg: #16131f;
+  /* Official brand colours, used only for the platform badges on the QR codes. */
+  --color-whatsapp: #25d366;
+  --color-instagram: #dd2a7b;
+  --gradient-instagram: linear-gradient(45deg, #f58529, #dd2a7b 50%, #8134af);
   --color-terminal-bg: #fcfbff;
   --color-terminal-bar: #f4f1fb;
   --color-terminal-line: #e2dcf1;
@@ -119,6 +126,9 @@
   --color-info: var(--color-info);
   --color-disabled: var(--color-disabled);
   --color-disabled-text: var(--color-disabled-text);
+  --color-qr-bg: var(--color-qr-bg);
+  --color-qr-fg: var(--color-qr-fg);
+  --color-whatsapp: var(--color-whatsapp);
   --color-terminal-bg: var(--color-terminal-bg);
   --color-terminal-bar: var(--color-terminal-bar);
   --color-terminal-line: var(--color-terminal-line);
@@ -338,6 +348,93 @@ body {
   transform: scale(0.985);
 }
 
+/* Contact fields draw their own focus ring (border + soft halo). */
+.contact-field:focus-visible {
+  outline: none;
+}
+
+.contact-status {
+  animation: terminal-line-in 0.3s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.qr-scan {
+  animation: qr-scan 3.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  will-change: transform, opacity;
+}
+
+.qr-scan::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 100%;
+  height: 32px;
+  background: linear-gradient(to top, var(--scan-color, var(--color-accent)), transparent);
+  opacity: 0.16;
+}
+
+.qr-scan::after {
+  content: "";
+  position: absolute;
+  inset-inline: 4%;
+  top: 0;
+  height: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--scan-color, var(--color-accent)),
+    transparent
+  );
+  box-shadow: 0 0 10px 1px var(--scan-color, var(--color-accent));
+  opacity: 0.8;
+}
+
+.qr-link:hover .qr-scan,
+.qr-link:focus-visible .qr-scan,
+.qr-link:active .qr-scan {
+  animation-duration: 1.5s;
+}
+
+.swipe-label {
+  background: linear-gradient(
+      90deg,
+      var(--color-text-muted) 0%,
+      var(--color-text-muted) 40%,
+      var(--color-text) 50%,
+      var(--color-text-muted) 60%,
+      var(--color-text-muted) 100%
+    )
+    0 0 / 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: swipe-shimmer 2.6s linear infinite;
+}
+
+@keyframes swipe-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -150% 0;
+  }
+}
+
+@keyframes qr-scan {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  12%,
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
 /* Focus is shown by the highlighted prompt row, solid cursor and window border. */
 .terminal-input:focus-visible {
   outline: none;
@@ -497,7 +594,8 @@ body {
   }
 
   .terminal-sweep,
-  .terminal-glitch {
+  .terminal-glitch,
+  .qr-scan {
     display: none;
   }
 }

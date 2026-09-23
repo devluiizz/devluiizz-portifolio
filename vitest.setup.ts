@@ -18,10 +18,13 @@ Object.defineProperty(window, "matchMedia", {
   }),
 });
 
-
-// jsdom does not implement element scrolling.
+// jsdom does not implement element scrolling or pointer capture.
 if (!Element.prototype.scrollTo) {
   Element.prototype.scrollTo = () => {};
+}
+if (!Element.prototype.setPointerCapture) {
+  Element.prototype.setPointerCapture = () => {};
+  Element.prototype.releasePointerCapture = () => {};
 }
 
 // jsdom has no IntersectionObserver; elements are never reported as visible.

@@ -144,9 +144,62 @@
   },
   "contact": {
     "eyebrow": "Contato",
-    "title": "Vamos conversar",
-    "description": "A forma mais direta de falar comigo é por e-mail. Também estou no GitHub e no LinkedIn.",
-    "email": "E-mail"
+    "title": "Tem uma ideia em mente?",
+    "titleAccent": "Vamos conversar sobre ela.",
+    "email": "E-mail",
+    "form": {
+      "eyebrow": "Briefing do projeto",
+      "required": "obrigatório",
+      "name": {
+        "label": "Seu nome",
+        "placeholder": "Como posso te chamar?"
+      },
+      "email": {
+        "label": "Seu e-mail",
+        "placeholder": "seuemail@exemplo.com"
+      },
+      "message": {
+        "label": "A ideia",
+        "placeholder": "Conte sobre o projeto, o problema que quer resolver ou só uma ideia ainda crua…",
+        "counter": "{count, number}/{max, number}"
+      },
+      "note": "Quanto mais contexto, melhor a conversa.",
+      "honeypot": "Deixe este campo em branco",
+      "submit": "Enviar mensagem",
+      "swipe": "Arraste para enviar",
+      "release": "Solte para enviar",
+      "submitting": "Enviando…",
+      "errors": {
+        "nameRequired": "Diga como posso te chamar.",
+        "nameTooShort": "O nome precisa ter pelo menos {min, number} caracteres.",
+        "nameTooLong": "O nome pode ter no máximo {max, number} caracteres.",
+        "emailRequired": "Informe seu e-mail para eu poder responder.",
+        "emailInvalid": "Digite um e-mail válido.",
+        "messageRequired": "Conte um pouco da sua ideia.",
+        "messageTooShort": "Escreva pelo menos {min, number} caracteres.",
+        "messageTooLong": "A mensagem pode ter no máximo {max, number} caracteres."
+      },
+      "status": {
+        "sentTitle": "Mensagem enviada!",
+        "sent": "Obrigado pelo contato — respondo assim que puder.",
+        "errorTitle": "Não foi possível enviar agora",
+        "error": "Tente novamente em instantes ou fale comigo pelo WhatsApp ou Instagram.",
+        "unavailableTitle": "O envio pelo formulário ainda não está ativo",
+        "unavailable": "Sua mensagem continua aqui. Enquanto isso, me chama no WhatsApp ou no Instagram — é rapidinho."
+      }
+    },
+    "direct": {
+      "eyebrow": "Linha direta",
+      "title": "Alérgico a formulários?",
+      "description": "Aponte a câmera para um dos códigos. O WhatsApp abre uma conversa comigo; o Instagram te leva direto ao meu perfil.",
+      "instagram": {
+        "label": "Instagram: escaneie o código ou clique para abrir o perfil"
+      },
+      "whatsapp": {
+        "label": "WhatsApp: escaneie o código ou clique para iniciar uma conversa"
+      },
+      "others": "Prefere o clássico?"
+    }
   },
   "footer": {
     "tagline": "Construído do zero, com atenção aos detalhes."

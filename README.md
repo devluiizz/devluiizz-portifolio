@@ -28,6 +28,11 @@ with a closed set of site commands (`help`, `goto`, `clear`, `exit`, `theme`,
 `date`, `uptime`). It is not a shell: input is parsed against a whitelist in
 `src/lib/terminal/commands.ts` and nothing typed is ever evaluated.
 
+The contact section pairs a validated form (Server Action in
+`src/lib/contact/`) with Instagram and WhatsApp QR codes. E-mail delivery is not
+wired to a provider yet, so the form tells visitors to use the direct channels;
+contact links live in `siteConfig` (`src/content/site.ts`).
+
 Set `NEXT_PUBLIC_SITE_URL` to the production domain so canonical, hreflang
 and Open Graph URLs are absolute (on Vercel the production URL is used
 automatically).

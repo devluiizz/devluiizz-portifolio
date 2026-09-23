@@ -144,9 +144,62 @@
   },
   "contact": {
     "eyebrow": "Contact",
-    "title": "Let’s talk",
-    "description": "Email is the most direct way to reach me. You can also find me on GitHub and LinkedIn.",
-    "email": "Email"
+    "title": "Have an idea in mind?",
+    "titleAccent": "Let’s talk it through.",
+    "email": "Email",
+    "form": {
+      "eyebrow": "New project brief",
+      "required": "required",
+      "name": {
+        "label": "Your name",
+        "placeholder": "What should I call you?"
+      },
+      "email": {
+        "label": "Your email",
+        "placeholder": "you@example.com"
+      },
+      "message": {
+        "label": "The idea",
+        "placeholder": "Tell me about the project, the problem you want to solve, or just a rough idea…",
+        "counter": "{count, number}/{max, number}"
+      },
+      "note": "The more context, the better the conversation.",
+      "honeypot": "Leave this field empty",
+      "submit": "Send message",
+      "swipe": "Swipe to send",
+      "release": "Release to send",
+      "submitting": "Sending…",
+      "errors": {
+        "nameRequired": "Let me know what to call you.",
+        "nameTooShort": "Your name needs at least {min, number} characters.",
+        "nameTooLong": "Your name can be at most {max, number} characters.",
+        "emailRequired": "Add your email so I can reply.",
+        "emailInvalid": "Enter a valid email address.",
+        "messageRequired": "Tell me a bit about your idea.",
+        "messageTooShort": "Write at least {min, number} characters.",
+        "messageTooLong": "Your message can be at most {max, number} characters."
+      },
+      "status": {
+        "sentTitle": "Message sent!",
+        "sent": "Thanks for reaching out — I’ll get back to you as soon as I can.",
+        "errorTitle": "Couldn’t send your message right now",
+        "error": "Please try again in a moment, or reach me on WhatsApp or Instagram.",
+        "unavailableTitle": "The form isn’t sending messages yet",
+        "unavailable": "Your message is still here. In the meantime, ping me on WhatsApp or Instagram — it’s quick."
+      }
+    },
+    "direct": {
+      "eyebrow": "Direct line",
+      "title": "Allergic to forms?",
+      "description": "Point your camera at either code. WhatsApp opens a chat with me; Instagram takes you straight to my profile.",
+      "instagram": {
+        "label": "Instagram: scan the code or click to open the profile"
+      },
+      "whatsapp": {
+        "label": "WhatsApp: scan the code or click to start a chat"
+      },
+      "others": "Prefer the classics?"
+    }
   },
   "footer": {
     "tagline": "Built from scratch, with attention to detail."
