@@ -42,7 +42,9 @@ test.describe("Terminal", () => {
     await expect(page.getByText("DEVLUIIZZ OS v2.0", { exact: true })).toBeVisible();
   });
 
-  test("echoes typed commands without executing them", async ({ page }) => {
+  test("treats unsafe input as unknown commands and never executes it", async ({
+    page,
+  }) => {
     let dialogs = 0;
     page.on("dialog", async (dialog) => {
       dialogs += 1;
@@ -50,18 +52,93 @@ test.describe("Terminal", () => {
     });
     const input = await gotoTerminal(page);
 
-    for (const command of ["ajuda", "alert(1)", "<img src=x onerror=alert(1)>"]) {
+    for (const command of [
+      "<script>alert(1)</script>",
+      "<img src=x onerror=alert(1)>",
+      "eval(alert(1))",
+      "rm -rf /",
+      "sudo",
+    ]) {
       await input.fill(command);
       await input.press("Enter");
     }
 
     const log = page.getByRole("log", { name: "Comandos digitados" });
-    await expect(log.getByRole("listitem")).toHaveCount(3);
-    await expect(log.getByRole("listitem").nth(2)).toContainText(
-      "<img src=x onerror=alert(1)>",
-    );
-    await expect(page.locator(".terminal-screen img")).toHaveCount(0);
+    await expect(log.getByText(/^Comando não encontrado:/)).toHaveCount(5);
+    await expect(
+      page.locator(".terminal-screen img, .terminal-screen script"),
+    ).toHaveCount(0);
     expect(dialogs).toBe(0);
+  });
+
+  test("help lists the commands and keeps the prompt focused", async ({ page }) => {
+    const input = await gotoTerminal(page);
+    await input.fill("HELP");
+    await input.press("Enter");
+
+    const log = page.getByRole("log", { name: "Comandos digitados" });
+    await expect(log.getByText("Navegação", { exact: true })).toBeVisible();
+    await expect(log.getByText("Sistema", { exact: true })).toBeVisible();
+    await expect(log.getByText("theme", { exact: true })).toBeVisible();
+    await expect(input).toBeFocused();
+  });
+
+  test("goto scrolls to a real section", async ({ page }) => {
+    const input = await gotoTerminal(page);
+    await input.fill("goto projetos");
+    await input.press("Enter");
+
+    await expect(page).toHaveURL(/#projects$/);
+    await expect(
+      page.getByRole("heading", { name: "O que eu construí" }),
+    ).toBeInViewport();
+  });
+
+  test("goto lists sections when the target does not exist", async ({ page }) => {
+    const input = await gotoTerminal(page);
+    await input.fill("goto banana");
+    await input.press("Enter");
+
+    await expect(page.getByText("Seção não encontrada: banana")).toBeVisible();
+    await expect(page.getByText("Seções disponíveis:")).toBeVisible();
+    await expect(page).toHaveURL(/#terminal$/);
+  });
+
+  test("theme uses the site theme and stays in sync with the toggle", async ({
+    page,
+    isMobile,
+  }) => {
+    const input = await gotoTerminal(page);
+    await input.fill("theme dark");
+    await input.press("Enter");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+
+    if (isMobile) await page.getByRole("button", { name: "Abrir menu" }).click();
+    await page.getByRole("button", { name: "Ativar tema claro" }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    if (isMobile) await page.getByRole("button", { name: "Fechar menu" }).click();
+
+    await input.fill("theme");
+    await input.press("Enter");
+    await expect(page.getByText("Tema atual: light")).toBeVisible();
+
+    await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  });
+
+  test("clear empties the screen and exit leaves the terminal", async ({ page }) => {
+    const input = await gotoTerminal(page);
+    for (const command of ["date", "uptime", "clear"]) {
+      await input.fill(command);
+      await input.press("Enter");
+    }
+    const log = page.getByRole("log", { name: "Comandos digitados" });
+    await expect(log.getByRole("listitem")).toHaveCount(0);
+
+    await input.fill("exit");
+    await input.press("Enter");
+    await expect(page).toHaveURL(/#home$/);
+    await expect(page.getByRole("heading", { level: 1 })).toBeInViewport();
   });
 
   test("scrolls to keep the prompt visible after many commands", async ({ page }) => {

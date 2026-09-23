@@ -4,13 +4,23 @@ import { useEffect, useReducer, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { siteConfig } from "@/content/site";
 import { usePrefersReducedMotion } from "@/hooks/useMediaQuery";
-import { initialTerminalState, terminalReducer } from "@/lib/terminal";
+import { useTheme } from "@/lib/theme";
+import {
+  completeInput,
+  executeCommand,
+  suggestCompletion,
+} from "@/lib/terminal/commands";
+import { sectionElementId } from "@/lib/terminal/sections";
+import { initialTerminalState, terminalReducer } from "@/lib/terminal/state";
+import type { TerminalEffect } from "@/lib/terminal/types";
 import { PromptLabel, TerminalPrompt } from "./TerminalPrompt";
+import { TerminalOutput } from "./TerminalOutput";
 import { TerminalLogo } from "./TerminalLogo";
 import { TerminalIcon } from "./TerminalIcon";
 
 const BOOTED_KEY = "portfolio-terminal-booted";
 const BOOT_LINES = ["init", "modules", "session"] as const;
+const EXIT_DELAY_MS = 450;
 
 const WINDOW_DOTS = [
   "bg-error hover:shadow-[0_0_10px_var(--color-error)]",
@@ -25,7 +35,10 @@ export function Terminal({ year }: { year: number }) {
   const [state, dispatch] = useReducer(terminalReducer, initialTerminalState);
   const [booted, setBooted] = useState(false);
   const [instant, setInstant] = useState(false);
+  const [exiting, setExiting] = useState(false);
+  const { theme, setTheme } = useTheme();
   const prefersReducedMotion = usePrefersReducedMotion();
+  const exitTimerRef = useRef<number | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const screenRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -70,6 +83,71 @@ export function Terminal({ year }: { year: number }) {
     });
   }, [state.entries.length, prefersReducedMotion]);
 
+  useEffect(() => {
+    return () => {
+      if (exitTimerRef.current !== null) window.clearTimeout(exitTimerRef.current);
+    };
+  }, []);
+
+  function scrollToSection(elementId: string) {
+    document.getElementById(elementId)?.scrollIntoView({
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+      block: "start",
+    });
+    window.history.replaceState(window.history.state, "", `#${elementId}`);
+  }
+
+  function runEffect(effect: TerminalEffect) {
+    switch (effect.type) {
+      case "clear":
+        return;
+      case "theme":
+        setTheme(effect.theme);
+        return;
+      case "navigate": {
+        if (effect.section !== "terminal") inputRef.current?.blur();
+        scrollToSection(sectionElementId(effect.section));
+        return;
+      }
+      case "exit": {
+        inputRef.current?.blur();
+        setExiting(true);
+        exitTimerRef.current = window.setTimeout(
+          () => {
+            exitTimerRef.current = null;
+            setExiting(false);
+            scrollToSection(sectionElementId("home"));
+          },
+          prefersReducedMotion ? 0 : EXIT_DELAY_MS,
+        );
+        return;
+      }
+    }
+  }
+
+  function handleSubmit() {
+    const result = executeCommand(state.input, {
+      theme,
+      now: Date.now(),
+      // Session = this page load; timeOrigin survives client-side locale switches.
+      sessionStart: performance.timeOrigin,
+      timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    });
+    dispatch({
+      type: "submit",
+      output: result.output,
+      clear: result.effect?.type === "clear",
+    });
+    if (result.effect) runEffect(result.effect);
+  }
+
+  function handleComplete(): boolean {
+    const completed = completeInput(state.input);
+    if (completed === null || completed === state.input) return false;
+    dispatch({ type: "input", value: completed });
+    return true;
+  }
+
   function focusInput() {
     if (window.getSelection()?.toString()) return;
     inputRef.current?.focus({ preventScroll: true });
@@ -97,7 +175,10 @@ export function Terminal({ year }: { year: number }) {
           className="terminal-glow absolute inset-x-10 -inset-y-2 rounded-[2rem]"
         />
 
-        <div className="terminal-frame relative overflow-hidden rounded-2xl border border-terminal-line bg-terminal-bg transition-colors duration-300 focus-within:border-terminal-accent/45">
+        <div
+          data-exiting={exiting || undefined}
+          className="terminal-frame relative overflow-hidden rounded-2xl border border-terminal-line bg-terminal-bg focus-within:border-terminal-accent/45"
+        >
           <div className="relative flex h-11 items-center gap-3 border-b border-terminal-line bg-terminal-bar px-4 sm:h-12 sm:px-5">
             <div aria-hidden="true" className="flex items-center gap-2">
               {WINDOW_DOTS.map((dot) => (
@@ -170,7 +251,7 @@ export function Terminal({ year }: { year: number }) {
                     <span>{t(`boot.${line}`)}</span>
                     <span
                       aria-hidden="true"
-                      className="text-success/80 ml-auto hidden sm:inline"
+                      className="ml-auto hidden text-success/80 sm:inline"
                     >
                       [ ok ]
                     </span>
@@ -186,7 +267,7 @@ export function Terminal({ year }: { year: number }) {
                 className="terminal-boot mt-5 sm:mt-6"
                 style={{ animationDelay: "1250ms" }}
               >
-                <span className="text-terminal-accent font-medium">
+                <span className="font-medium text-terminal-accent">
                   DEVLUIIZZ OS v2.0
                 </span>
                 <span className="text-terminal-muted"> - </span>
@@ -217,14 +298,20 @@ export function Terminal({ year }: { year: number }) {
               </p>
 
               <ol aria-label={t("historyLabel")} role="log" className="mt-5">
-                {state.entries.map((entry) => (
-                  <li key={entry.id} className="flex items-start gap-x-2">
-                    <PromptLabel />
-                    <span className="min-w-0 break-all whitespace-pre-wrap">
-                      {entry.input}
-                    </span>
-                  </li>
-                ))}
+                {state.entries.map((entry) =>
+                  entry.kind === "command" ? (
+                    <li key={entry.id} className="flex items-start gap-x-2">
+                      <PromptLabel />
+                      <span className="min-w-0 whitespace-pre-wrap break-all">
+                        {entry.input}
+                      </span>
+                    </li>
+                  ) : (
+                    <li key={entry.id}>
+                      <TerminalOutput blocks={entry.blocks} />
+                    </li>
+                  ),
+                )}
               </ol>
 
               <div className="terminal-boot" style={{ animationDelay: "1600ms" }}>
@@ -234,7 +321,9 @@ export function Terminal({ year }: { year: number }) {
                   placeholder={t("placeholder")}
                   inputRef={inputRef}
                   onChange={(value) => dispatch({ type: "input", value })}
-                  onSubmit={() => dispatch({ type: "submit" })}
+                  suggestion={suggestCompletion(state.input)}
+                  onSubmit={handleSubmit}
+                  onComplete={handleComplete}
                   onHistory={(direction) => dispatch({ type: "history", direction })}
                 />
               </div>

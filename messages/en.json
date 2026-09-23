@@ -109,7 +109,38 @@
     "hint": "Type <command>''help''</command> to see the commands",
     "placeholder": "Type a command",
     "inputLabel": "Terminal command",
-    "historyLabel": "Entered commands"
+    "historyLabel": "Entered commands",
+    "output": {
+      "notFound": "Command not found: {command}",
+      "notFoundHint": "Type <code>''help''</code> to see available commands.",
+      "gotoUsage": "Usage: goto [section]",
+      "sectionNotFound": "Section not found: {section}",
+      "availableSections": "Available sections:",
+      "navigating": "Navigating to {section}…",
+      "themeCurrent": "Current theme: {theme}",
+      "themeUsage": "Usage: theme [light/dark]",
+      "themeInvalid": "Invalid theme: {theme}",
+      "themeChanged": "Theme switched to {theme}.",
+      "themeUnchanged": "Theme is already {theme}.",
+      "uptime": "Session uptime: {duration}",
+      "exiting": "Exiting DEVLUIIZZ OS…"
+    },
+    "help": {
+      "title": "Command reference",
+      "categories": {
+        "navigation": "Navigation",
+        "system": "System"
+      },
+      "commands": {
+        "goto": "Jump straight to a section of the portfolio.",
+        "clear": "Clear the terminal screen.",
+        "exit": "Leave the terminal and go back to the top of the portfolio.",
+        "theme": "Change the site’s visual theme.",
+        "date": "Show the current date and time.",
+        "uptime": "Show how long the current session has been active."
+      },
+      "tip": "<key>TAB</key> completes commands · <key>↑ ↓</key> browse history"
+    }
   },
   "contact": {
     "eyebrow": "Contact",

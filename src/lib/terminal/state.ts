@@ -1,6 +1,7 @@
-// Terminal session state. Submitted lines are recorded but never interpreted:
-// a command dispatcher (parser → registry → handler) can later hook into the
-// "submit" transition and append output entries to the same log.
+import type { TerminalBlock } from "./types";
+
+// Terminal session state. Commands are executed outside the reducer (see
+// commands.ts); the reducer only records the submitted line and its output.
 
 export interface TerminalCommandEntry {
   id: number;
@@ -8,7 +9,13 @@ export interface TerminalCommandEntry {
   input: string;
 }
 
-export type TerminalEntry = TerminalCommandEntry;
+export interface TerminalOutputEntry {
+  id: number;
+  kind: "output";
+  blocks: TerminalBlock[];
+}
+
+export type TerminalEntry = TerminalCommandEntry | TerminalOutputEntry;
 
 export interface TerminalState {
   entries: TerminalEntry[];
@@ -21,7 +28,7 @@ export interface TerminalState {
 
 export type TerminalAction =
   | { type: "input"; value: string }
-  | { type: "submit" }
+  | { type: "submit"; output?: TerminalBlock[]; clear?: boolean }
   | { type: "history"; direction: "previous" | "next" };
 
 export const MAX_TERMINAL_ENTRIES = 200;
@@ -45,19 +52,26 @@ export function terminalReducer(
 
     case "submit": {
       const input = state.input.trimEnd();
-      const entry: TerminalCommandEntry = { id: state.nextId, kind: "command", input };
       const history =
         input.trim() !== "" && state.history.at(-1) !== input
           ? [...state.history, input]
           : state.history;
+
+      const added: TerminalEntry[] = [{ id: state.nextId, kind: "command", input }];
+      if (action.output && action.output.length > 0) {
+        added.push({ id: state.nextId + 1, kind: "output", blocks: action.output });
+      }
+
       return {
         ...state,
-        entries: [...state.entries, entry].slice(-MAX_TERMINAL_ENTRIES),
+        entries: action.clear
+          ? []
+          : [...state.entries, ...added].slice(-MAX_TERMINAL_ENTRIES),
         input: "",
         history,
         historyIndex: null,
         draft: "",
-        nextId: state.nextId + 1,
+        nextId: state.nextId + added.length,
       };
     }
 

@@ -23,9 +23,10 @@ an English file falls back to the Portuguese one. Experience entries in
 `src/content/experiences.ts` carry both languages per field. Non-translatable
 site data (name, contact links) lives in `src/content/site.ts`.
 
-The home page includes DEVLUIIZZ OS (`#terminal`, above Contact), a visual terminal. For now it only echoes
-what is typed; nothing is executed. Session state lives in
-`src/lib/terminal.ts`, which is where command handling will plug in.
+The home page includes DEVLUIIZZ OS (`#terminal`, above Contact), a terminal
+with a closed set of site commands (`help`, `goto`, `clear`, `exit`, `theme`,
+`date`, `uptime`). It is not a shell: input is parsed against a whitelist in
+`src/lib/terminal/commands.ts` and nothing typed is ever evaluated.
 
 Set `NEXT_PUBLIC_SITE_URL` to the production domain so canonical, hreflang
 and Open Graph URLs are absolute (on Vercel the production URL is used

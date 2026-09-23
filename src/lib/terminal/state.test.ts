@@ -5,7 +5,7 @@ import {
   terminalReducer,
   type TerminalAction,
   type TerminalState,
-} from "./terminal";
+} from "./state";
 
 function run(actions: TerminalAction[], state: TerminalState = initialTerminalState) {
   return actions.reduce(terminalReducer, state);
@@ -25,13 +25,30 @@ describe("terminalReducer", () => {
   it("records empty submissions as blank prompt lines without adding them to history", () => {
     const state = run([{ type: "submit" }]);
     expect(state.entries).toHaveLength(1);
-    expect(state.entries[0].input).toBe("");
+    expect(state.entries[0]).toMatchObject({ kind: "command", input: "" });
     expect(state.history).toEqual([]);
   });
 
-  it("only ever produces command entries, nothing is interpreted", () => {
-    const state = run([...type("rm -rf /"), ...type("alert(1)")]);
-    expect(state.entries.every((entry) => entry.kind === "command")).toBe(true);
+  it("appends the output produced for a submitted command", () => {
+    const state = run([
+      { type: "input", value: "help" },
+      { type: "submit", output: [{ type: "help" }] },
+    ]);
+    expect(state.entries).toEqual([
+      { id: 0, kind: "command", input: "help" },
+      { id: 1, kind: "output", blocks: [{ type: "help" }] },
+    ]);
+    expect(state.nextId).toBe(2);
+  });
+
+  it("clears the screen but keeps command history", () => {
+    const state = run([
+      ...type("date"),
+      { type: "input", value: "clear" },
+      { type: "submit", clear: true },
+    ]);
+    expect(state.entries).toEqual([]);
+    expect(state.history).toEqual(["date", "clear"]);
   });
 
   it("walks back and forth through history, restoring the draft at the end", () => {
@@ -64,6 +81,6 @@ describe("terminalReducer", () => {
     ).flat();
     const state = run(actions);
     expect(state.entries).toHaveLength(MAX_TERMINAL_ENTRIES);
-    expect(state.entries.at(-1)?.input).toBe(`c${MAX_TERMINAL_ENTRIES + 4}`);
+    expect(state.entries.at(-1)).toMatchObject({ input: `c${MAX_TERMINAL_ENTRIES + 4}` });
   });
 });

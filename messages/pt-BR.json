@@ -109,7 +109,38 @@
     "hint": "Digite <command>''ajuda''</command> para ver os comandos",
     "placeholder": "Escreva o comando",
     "inputLabel": "Comando do terminal",
-    "historyLabel": "Comandos digitados"
+    "historyLabel": "Comandos digitados",
+    "output": {
+      "notFound": "Comando não encontrado: {command}",
+      "notFoundHint": "Digite <code>''help''</code> para ver os comandos disponíveis.",
+      "gotoUsage": "Uso: goto [seção]",
+      "sectionNotFound": "Seção não encontrada: {section}",
+      "availableSections": "Seções disponíveis:",
+      "navigating": "Navegando para {section}…",
+      "themeCurrent": "Tema atual: {theme}",
+      "themeUsage": "Uso: theme [light/dark]",
+      "themeInvalid": "Tema inválido: {theme}",
+      "themeChanged": "Tema alterado para {theme}.",
+      "themeUnchanged": "O tema já está em {theme}.",
+      "uptime": "Sessão ativa há {duration}",
+      "exiting": "Encerrando DEVLUIIZZ OS…"
+    },
+    "help": {
+      "title": "Manual de comandos",
+      "categories": {
+        "navigation": "Navegação",
+        "system": "Sistema"
+      },
+      "commands": {
+        "goto": "Navega diretamente para uma seção do portfólio.",
+        "clear": "Limpa o conteúdo do terminal.",
+        "exit": "Sai do terminal e volta ao início do portfólio.",
+        "theme": "Altera o tema visual do site.",
+        "date": "Exibe a data e hora atuais.",
+        "uptime": "Exibe há quanto tempo a sessão atual está ativa."
+      },
+      "tip": "<key>TAB</key> completa comandos · <key>↑ ↓</key> percorre o histórico"
+    }
   },
   "contact": {
     "eyebrow": "Contato",

@@ -15,9 +15,13 @@ interface TerminalPromptProps {
   value: string;
   label: string;
   placeholder: string;
+  /** Muted completion shown after the cursor; TAB accepts it. */
+  suggestion?: string;
   inputRef: RefObject<HTMLInputElement | null>;
   onChange: (value: string) => void;
   onSubmit: () => void;
+  /** Returns true when it changed the input, so TAB only moves focus otherwise. */
+  onComplete?: () => boolean;
   onHistory: (direction: "previous" | "next") => void;
 }
 
@@ -25,9 +29,11 @@ export function TerminalPrompt({
   value,
   label,
   placeholder,
+  suggestion = "",
   inputRef,
   onChange,
   onSubmit,
+  onComplete,
   onHistory,
 }: TerminalPromptProps) {
   const mirrorRef = useRef<HTMLDivElement>(null);
@@ -56,6 +62,11 @@ export function TerminalPrompt({
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Tab" && !event.shiftKey && onComplete?.()) {
+      event.preventDefault();
+      moveCaretToEnd();
+      return;
+    }
     if (event.key === "ArrowUp" || event.key === "ArrowDown") {
       event.preventDefault();
       onHistory(event.key === "ArrowUp" ? "previous" : "next");
@@ -66,8 +77,10 @@ export function TerminalPrompt({
   }
 
   const before = value.slice(0, caret);
-  const under = value[caret] ?? " ";
+  const atEnd = caret === value.length;
+  const under = value[caret] ?? (suggestion ? suggestion[0] : " ");
   const after = value.slice(caret + 1);
+  const ghost = atEnd ? suggestion.slice(1) : "";
 
   return (
     <form
@@ -100,6 +113,7 @@ export function TerminalPrompt({
           )}
           {hasSelection && value[caret]}
           {after}
+          {ghost && <span className="text-terminal-muted/60">{ghost}</span>}
           {value === "" && <span className="text-terminal-muted">{placeholder}</span>}
         </div>
         <label htmlFor="terminal-input" className="sr-only">
