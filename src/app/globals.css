@@ -136,9 +136,9 @@
   --color-terminal-muted: var(--color-terminal-muted);
   --color-terminal-accent: var(--color-terminal-accent);
   --color-terminal-accent-strong: var(--color-terminal-accent-strong);
-  --font-display: var(--font-fraunces);
-  --font-sans: var(--font-manrope);
-  --font-mono: var(--font-jetbrains-mono);
+  --font-display: var(--font-syne);
+  --font-sans: var(--font-ibm-plex-mono);
+  --font-mono: var(--font-ibm-plex-mono);
 }
 
 * {

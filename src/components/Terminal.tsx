@@ -236,6 +236,7 @@ export function Terminal({ year }: { year: number }) {
             <div
               ref={screenRef}
               onMouseUp={focusInput}
+              data-lenis-prevent
               className="terminal-screen relative h-[min(60svh,540px)] min-h-[400px] overflow-y-auto overscroll-contain px-4 py-5 font-mono text-[13px] leading-7 text-terminal-text sm:px-8 sm:py-7 sm:text-sm"
             >
               <ul className="text-[11px] leading-6 text-terminal-muted sm:text-xs">
